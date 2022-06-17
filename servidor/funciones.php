@@ -28,10 +28,30 @@
   */
  function getAllContactos($db)
  {
-        $query = "SELECT * FROM contactos";
-	      $sql = $db->prepare($query);
-        $sql->execute();
-        $sql->setFetchMode(PDO::FETCH_ASSOC);
-        $res = $sql->fetchAll() ;
-        return $res;
+      $query = "SELECT * FROM contactos";
+	    $sql = $db->prepare($query);
+      $sql->execute();
+      $sql->setFetchMode(PDO::FETCH_ASSOC);
+      $res = $sql->fetchAll() ;
+      return $res;
  }
+
+ /**
+  * Recupera un conctaco
+  * 
+  * @param [PDO] $db
+  * @param $userId I
+  *
+  * @return array
+  */
+  function getContacto($db, $userId)
+  {
+    $query = "SELECT * FROM contactos where id = :id";
+    $sql = $db->prepare($query);
+    $parametros = array(":id"=>$userId);
+    $sql->execute($parametros);
+    $sql->setFetchMode(PDO::FETCH_ASSOC);
+    $res = $sql->fetchAll() ;
+    return $res;
+    }
+ 

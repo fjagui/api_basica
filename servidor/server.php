@@ -20,6 +20,7 @@ $db = openConnection();
 
 
 # Cabeceras
+
 header("Access-Control-Allow-Origin: *"); //Orígenes permitidos para acceso desde ip distinta.
 header("Content-Type: application/json; charset=UTF-8"); //Tipo documento
 header("Access-Control-Allow-Methods: OPTIONS,GET,POST,PUT,DELETE"); //Métodos permitidos.
@@ -37,19 +38,23 @@ $requestMethod = $_SERVER["REQUEST_METHOD"];
 
 //Parseamos la dirección de entrada
 $request= parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$request=str_replace(DIRBASE,'',$_SERVER['REQUEST_URI']);
 $uri = explode( '/', $request );
 
 //Si existe recuperamos el id del usuario.
 $userId = null;
-if (isset($uri[2])) {
-    $userId = (int) $uri[2];
+if (isset($uri[1])) {
+    $userId = (int) $uri[1];
+
 }
 
 #Respuesta a los end_point.
 switch ($requestMethod) {
     case 'GET':
         if ($userId) {
-         //   $response = getContactos($userId);
+            $result  = getContacto($db, $userId);
+            $response['status_code_header'] = 'HTTP/1.1 200 OK';
+            $response['body'] = json_encode($result);
         } else {
             $result = getAllContactos($db);
             $response['status_code_header'] = 'HTTP/1.1 200 OK';
